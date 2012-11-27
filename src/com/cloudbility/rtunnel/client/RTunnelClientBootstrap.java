@@ -5,10 +5,9 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -17,8 +16,9 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudbility.rtunnel.RTunnelBootstrap;
 import com.cloudbility.rtunnel.buffer.Packet;
+import com.cloudbility.rtunnel.common.RTunnelBootstrap;
+import com.skybility.cloudsoft.agent.common.AdvancedProperties;
 
 /**
  * restart supported,but not test.
@@ -26,7 +26,7 @@ import com.cloudbility.rtunnel.buffer.Packet;
  * @author atlas
  * @date 2012-10-30
  */
-public class RTunnelClientBootstrap extends RTunnelBootstrap {
+public class RTunnelClientBootstrap extends RTunnelBootstrap implements TunnelConfig{
 	private static final Logger log = LoggerFactory
 			.getLogger(RTunnelClientBootstrap.class);
 	/**
@@ -93,7 +93,7 @@ public class RTunnelClientBootstrap extends RTunnelBootstrap {
 		// connect to proxy server first
 		ClientBootstrap bootstrap = new ClientBootstrap(cscf);
 		bootstrap.setPipelineFactory(new ClientOutboundChannelPipelineFactory(
-				config));
+				config, this));
 		ChannelFuture future = bootstrap.connect(new InetSocketAddress(config
 				.getProxyServerHost(), config.getProxyServerPort()));
 
@@ -167,6 +167,77 @@ public class RTunnelClientBootstrap extends RTunnelBootstrap {
 
 	public void setConfig(ClientConfig config) {
 		this.config = config;
+	}
+	
+	private volatile boolean deflate = Boolean.TRUE.equals(AdvancedProperties.getInstance().getAsBoolean("initialDeflate"));
+	private volatile boolean encrypted = Boolean.TRUE.equals(AdvancedProperties.getInstance().getAsBoolean("initialEncryption"));
+	
+	
+	/**
+	 * 5 s
+	 */
+	private int interval = 5000;
+	private long lastUpdateTime;
+	
+	private AtomicLong unCompressedBytes = new AtomicLong(0);
+	private AtomicLong compressedBytes = new AtomicLong(0);
+	
+	/**
+	 * 设置实时压缩率（5s的时间窗口）
+	 * 
+	 * @param compressed
+	 * @param uncompressed
+	 */
+	public void setCompressRatio(int compressed, int uncompressed) {
+		if (System.currentTimeMillis() - interval > lastUpdateTime) {
+			lastUpdateTime = System.currentTimeMillis();
+			this.unCompressedBytes.set(uncompressed);
+			this.compressedBytes.set(compressed);
+		} else {
+			this.unCompressedBytes.addAndGet(uncompressed);
+			this.compressedBytes.addAndGet(compressed);
+		}
+	}
+	
+	public boolean isCompressed() {
+		return deflate;
+	}
+
+	@Override
+	public void setCompressed(boolean compressed) {
+		this.deflate = compressed;
+	}
+
+	@Override
+	public void setCompressed(boolean compressed, int level) {
+		setCompressed(compressed);
+		// right now,ignore level.
+	}
+
+	@Override
+	public int getCompressionLevel() {
+		// right now,just return default level 6.
+		return 6;
+	}
+
+	@Override
+	public double getCompressionRatio() {
+		if (deflate) {
+			if (unCompressedBytes.get() > 0) {
+				return compressedBytes.get() * 1.0D / unCompressedBytes.get();
+			}
+		}
+		return 1.0D;
+	}
+
+	@Override
+	public boolean isEncrypted() {
+		return encrypted;
+	}
+	
+	@Override
+	public void setEncrypted() throws Exception {
+		encrypted = true;
 	}
 
 }

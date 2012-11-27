@@ -1,6 +1,6 @@
 package com.cloudbility.rtunnel.client;
 
-import com.cloudbility.rtunnel.RtunnelConfig;
+import com.cloudbility.rtunnel.common.RtunnelConfig;
 
 /**
  * 

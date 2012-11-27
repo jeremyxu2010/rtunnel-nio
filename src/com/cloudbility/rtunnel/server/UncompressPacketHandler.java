@@ -14,7 +14,7 @@ import org.jboss.netty.channel.SimpleChannelDownstreamHandler;
 
 import com.cloudbility.rtunnel.buffer.Packet;
  
-public class UnCompressPacketHandler extends SimpleChannelDownstreamHandler {
+public class UncompressPacketHandler extends SimpleChannelDownstreamHandler {
 	@Override
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {

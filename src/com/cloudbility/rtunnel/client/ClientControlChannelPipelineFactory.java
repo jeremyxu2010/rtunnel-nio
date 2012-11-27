@@ -4,9 +4,9 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
-import com.cloudbility.rtunnel.HeartBeatTimerHandler;
-import com.cloudbility.rtunnel.ReceivingPacketHandler;
-import com.cloudbility.rtunnel.WritePacketHandler;
+import com.cloudbility.rtunnel.common.HeartBeatTimerHandler;
+import com.cloudbility.rtunnel.common.ReceivingPacketHandler;
+import com.cloudbility.rtunnel.common.WritePacketHandler;
 
 /**
  * agentd->agentSrv 控制通道使用的ChannelPipelineFactory

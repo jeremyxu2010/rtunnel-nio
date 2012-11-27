@@ -8,8 +8,8 @@ import org.jboss.netty.channel.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudbility.rtunnel.CommonHandler;
 import com.cloudbility.rtunnel.buffer.Packet;
+import com.cloudbility.rtunnel.common.CommonHandler;
 
 /**
  * 
