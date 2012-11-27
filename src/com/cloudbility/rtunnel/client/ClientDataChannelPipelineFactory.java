@@ -17,12 +17,14 @@ import com.cloudbility.rtunnel.common.WritePacketHandler;
 public class ClientDataChannelPipelineFactory implements ChannelPipelineFactory {
 	private ClientOutboundInfo info;
 	private ClientPipeConfig config;
+	private TunnelConfig tunnelConfig;
 
 	public ClientDataChannelPipelineFactory(ClientOutboundInfo info,
-			ClientPipeConfig config) {
+			ClientPipeConfig config, TunnelConfig tunnelConfig) {
 		super();
 		this.info = info;
 		this.config = config;
+		this.tunnelConfig = tunnelConfig;
 	}
 
 	public ChannelPipeline getPipeline() throws Exception {
@@ -33,6 +35,8 @@ public class ClientDataChannelPipelineFactory implements ChannelPipelineFactory 
 		
 		// filter heart beat packet
 		cpl.addLast("heartBeatTimer", new HeartBeatTimerHandler());
+		
+		cpl.addLast("compressPacket", new CompressPacketHandler(tunnelConfig));
 		
 		cpl.addLast("DHKeyExchanger", new DHKeyExchangerHandler());
 		

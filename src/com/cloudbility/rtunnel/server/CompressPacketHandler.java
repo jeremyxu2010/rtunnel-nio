@@ -28,7 +28,11 @@ public class CompressPacketHandler extends CommonHandler{
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object msg = e.getMessage();
 		if (msg instanceof Packet && ((Packet)msg).isProtocol(Packet.DATA)) {
-			compressed.set(((Packet)msg).isCompressed());
+			Packet p = (Packet) msg;
+			compressed.set(p.isCompressed());
+			if(p.isCompressed()){
+				p.decode();
+			}
 		}
 		super.messageReceived(ctx, e);
 	}
@@ -36,7 +40,7 @@ public class CompressPacketHandler extends CommonHandler{
 	@Override
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object msg = e.getMessage();
-		if (msg instanceof Packet && this.compressed.get()) {
+		if (msg instanceof Packet && this.compressed.get() && ((Packet)msg).isProtocol(Packet.DATA)) {
 			Packet p = (Packet) msg;
 			int uncompressed = p.getDataLen();
 			if (uncompressed > compressThreshold) {

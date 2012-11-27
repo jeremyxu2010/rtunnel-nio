@@ -15,25 +15,35 @@ import com.cloudbility.rtunnel.buffer.Packet;
 import com.cloudbility.rtunnel.common.CommonHandler;
 import com.skybility.cloudsoft.agent.common.AdvancedProperties;
  
-public class CompressOrUncompressPacketHandler extends CommonHandler {
+public class CompressPacketHandler extends CommonHandler {
 
 	private TunnelConfig tunnelConfig;
 	
 	// if package's length less than this,do not compress.
 	private int compressThreshold = AdvancedProperties.getInstance().requireInteger("compressThreshold");
 
-	public CompressOrUncompressPacketHandler() {
+	public CompressPacketHandler() {
 		
     }
 	
-	public CompressOrUncompressPacketHandler(TunnelConfig tunnelConfig) {
+	public CompressPacketHandler(TunnelConfig tunnelConfig) {
 	    this.tunnelConfig = tunnelConfig;
     }
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object msg = e.getMessage();
-		if (this.tunnelConfig != null && msg instanceof Packet) {
+		if (msg instanceof Packet) {
+			Packet cp = (Packet) msg;
+			cp.decode();
+		}
+		super.messageReceived(ctx, e);
+	}
+	
+	@Override
+	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+		Object msg = e.getMessage();
+		if (this.tunnelConfig != null && msg instanceof Packet && ((Packet)msg).isProtocol(Packet.DATA)) {
 			Packet p = (Packet) msg;
 			boolean isCompressed = this.tunnelConfig.isCompressed();
 			if (isCompressed) {
@@ -47,16 +57,6 @@ public class CompressOrUncompressPacketHandler extends CommonHandler {
 					this.tunnelConfig.setCompressRatio(compressed, uncompressed);
 				}
 			}
-		}
-		super.messageReceived(ctx, e);
-	}
-	
-	@Override
-	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		Object msg = e.getMessage();
-		if (msg instanceof Packet) {
-			Packet cp = (Packet) msg;
-			cp.decode();
 		}
 	    super.writeRequested(ctx, e);
 	}

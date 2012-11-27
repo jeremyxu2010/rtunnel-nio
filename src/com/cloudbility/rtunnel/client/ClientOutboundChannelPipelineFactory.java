@@ -17,13 +17,10 @@ public class ClientOutboundChannelPipelineFactory implements
 	
 	@SuppressWarnings("unused")
 	private ClientPipeConfig config;
-	private TunnelConfig tunnelConfig;
 	
-	
-	public ClientOutboundChannelPipelineFactory(ClientPipeConfig config, TunnelConfig tunnelConfig) {
+	public ClientOutboundChannelPipelineFactory(ClientPipeConfig config) {
 		super();
 		this.config = config;
-		this.tunnelConfig = tunnelConfig;
 	}
 
 
@@ -34,7 +31,6 @@ public class ClientOutboundChannelPipelineFactory implements
 		//把读出的数据封装成Packet
 		cpl.addLast("readDecoder", new ReceivingDataAsPacket());
 		
-		cpl.addLast("compressPacket", new CompressOrUncompressPacketHandler(tunnelConfig));
 		//
 		ClientOutboundHandler handler = new ClientOutboundHandler();
 		cpl.addLast("outboundHandler", handler);

@@ -93,7 +93,7 @@ public class RTunnelClientBootstrap extends RTunnelBootstrap implements TunnelCo
 		// connect to proxy server first
 		ClientBootstrap bootstrap = new ClientBootstrap(cscf);
 		bootstrap.setPipelineFactory(new ClientOutboundChannelPipelineFactory(
-				config, this));
+				config));
 		ChannelFuture future = bootstrap.connect(new InetSocketAddress(config
 				.getProxyServerHost(), config.getProxyServerPort()));
 
@@ -106,7 +106,7 @@ public class RTunnelClientBootstrap extends RTunnelBootstrap implements TunnelCo
 		// then connect to rtunnel server and request for a data channel.
 		bootstrap = new ClientBootstrap(cscf);
 		bootstrap.setPipelineFactory(new ClientDataChannelPipelineFactory(info,
-				config));
+				config, this));
 		future = bootstrap.connect(new InetSocketAddress(this.config
 				.getRtunnelServerHost(), this.config.getRtunnelServerPort()));
 		Channel inboundChannel = future.getChannel();

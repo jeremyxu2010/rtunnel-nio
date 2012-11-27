@@ -28,6 +28,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.cloudbility.common.crypto.AESCipher;
 import com.cloudbility.common.skip.SKIP;
 import com.cloudbility.common.skip.SkipException;
 import com.cloudbility.rtunnel.buffer.Packet;
@@ -43,7 +44,7 @@ public class DHKeyExchangerHandler extends CommonHandler {
 
 	private PublicKey peerDHPublicKey;
 
-	private byte[] key;
+	private AESCipher cipher;
 
 	private void init() throws SkipException {
 		try {
@@ -81,7 +82,8 @@ public class DHKeyExchangerHandler extends CommonHandler {
 				this.sendDHPublicKey(e.getChannel(), Packet.ACK_DH_KEY);
 			} else if (msg instanceof Packet && ((Packet) msg).isProtocol(Packet.ACK_DH_KEY)) {
 				this.receiveDHPublicKey(msg);
-				this.key = generateKey();
+				byte[] key = generateKey();
+				this.cipher = AESCipher.getInstance(key);
 				shared = true;
 				Channels.fireChannelConnected(e.getChannel(), remoteAddress);
 			}

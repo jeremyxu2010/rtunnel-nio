@@ -26,12 +26,12 @@ public class ForwardServerChannelPipelineFactory implements
 
 	public ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline cpl = Channels.pipeline();
+		
 		//wrap whatever to a Packet
 		cpl.addLast("packetDecoder", new ReceivingDataAsPacket());
 		//if writing a packet, just write it's data area.
 		cpl.addLast("packetEncoder", new WritePacketDataHandler());
 		
-		cpl.addLast("uncompressPacket", new UncompressPacketHandler());
 		//
 		cpl.addLast("forwarder", new ForwardHandler(server, info));
 		return cpl;

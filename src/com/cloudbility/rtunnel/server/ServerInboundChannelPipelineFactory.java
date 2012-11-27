@@ -4,7 +4,6 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
-import com.cloudbility.rtunnel.client.CompressOrUncompressPacketHandler;
 import com.cloudbility.rtunnel.common.DHKeyExchangerHandler;
 import com.cloudbility.rtunnel.common.HeartBeatTimerHandler;
 import com.cloudbility.rtunnel.common.ReceivingPacketHandler;
