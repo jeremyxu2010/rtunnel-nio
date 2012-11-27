@@ -4,7 +4,10 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
+import com.cloudbility.rtunnel.common.CipherHolder;
 import com.cloudbility.rtunnel.common.DHKeyExchangerHandler;
+import com.cloudbility.rtunnel.common.DataPacketProcessorHandler;
+import com.cloudbility.rtunnel.common.EncryptPacketHandler;
 import com.cloudbility.rtunnel.common.HeartBeatTimerHandler;
 import com.cloudbility.rtunnel.common.ReceivingPacketHandler;
 import com.cloudbility.rtunnel.common.WritePacketHandler;
@@ -30,15 +33,18 @@ public class ClientDataChannelPipelineFactory implements ChannelPipelineFactory 
 	public ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline cpl = Channels.pipeline();
 		cpl.addLast("encoder", new ReceivingPacketHandler());
-		
 		cpl.addLast("decoder", new WritePacketHandler());
 		
 		// filter heart beat packet
 		cpl.addLast("heartBeatTimer", new HeartBeatTimerHandler());
 		
-		cpl.addLast("compressPacket", new CompressPacketHandler(tunnelConfig));
+		CipherHolder cipherHolder = new CipherHolder();
+		cpl.addLast("DHKeyExchanger", new DHKeyExchangerHandler(cipherHolder));
 		
-		cpl.addLast("DHKeyExchanger", new DHKeyExchangerHandler());
+		cpl.addLast("dataPacketProcessor", new DataPacketProcessorHandler(cipherHolder));
+		
+		cpl.addLast("compressPacket", new CompressPacketHandler(tunnelConfig));
+		cpl.addLast("encryptPacket", new EncryptPacketHandler(cipherHolder));
 		
 		// any data or control packet can reach here
 		cpl.addLast(

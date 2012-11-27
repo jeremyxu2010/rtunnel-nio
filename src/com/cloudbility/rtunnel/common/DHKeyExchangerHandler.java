@@ -32,6 +32,7 @@ import com.cloudbility.common.crypto.AESCipher;
 import com.cloudbility.common.skip.SKIP;
 import com.cloudbility.common.skip.SkipException;
 import com.cloudbility.rtunnel.buffer.Packet;
+import com.cloudbility.rtunnel.client.TunnelConfig;
 
 public class DHKeyExchangerHandler extends CommonHandler {
 
@@ -44,7 +45,9 @@ public class DHKeyExchangerHandler extends CommonHandler {
 
 	private PublicKey peerDHPublicKey;
 
-	private AESCipher cipher;
+	private CipherHolder cipherHolder;
+
+//	private AESCipher cipher;
 
 	private void init() throws SkipException {
 		try {
@@ -58,9 +61,10 @@ public class DHKeyExchangerHandler extends CommonHandler {
 			throw new SkipException("DH algorithm not supported.", e);
 		}
 	}
-
-	public DHKeyExchangerHandler() throws SkipException {
+	
+	public DHKeyExchangerHandler(CipherHolder cipherHolder) throws SkipException {
 		this.init();
+		this.cipherHolder = cipherHolder;
 	}
 
 	@Override
@@ -83,7 +87,7 @@ public class DHKeyExchangerHandler extends CommonHandler {
 			} else if (msg instanceof Packet && ((Packet) msg).isProtocol(Packet.ACK_DH_KEY)) {
 				this.receiveDHPublicKey(msg);
 				byte[] key = generateKey();
-				this.cipher = AESCipher.getInstance(key);
+				cipherHolder.setCipher(AESCipher.getInstance(key));
 				shared = true;
 				Channels.fireChannelConnected(e.getChannel(), remoteAddress);
 			}

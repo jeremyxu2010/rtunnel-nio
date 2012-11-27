@@ -4,6 +4,7 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
+import com.cloudbility.rtunnel.common.CipherHolder;
 import com.cloudbility.rtunnel.common.DHKeyExchangerHandler;
 import com.cloudbility.rtunnel.common.HeartBeatTimerHandler;
 import com.cloudbility.rtunnel.common.ReceivingPacketHandler;
@@ -37,7 +38,9 @@ public class ClientControlChannelPipelineFactory implements
 		// filter heart beat packet
 		cpl.addLast("heartBeatTimer", new HeartBeatTimerHandler());
 		
-		cpl.addLast("DHKeyExchanger", new DHKeyExchangerHandler());
+		CipherHolder cipherHolder = new CipherHolder();
+		
+		cpl.addLast("DHKeyExchanger", new DHKeyExchangerHandler(cipherHolder));
 		
 		// any data or control packet can reach here
 		cpl.addLast("controller", new ControlTunnelHandler(client, config));

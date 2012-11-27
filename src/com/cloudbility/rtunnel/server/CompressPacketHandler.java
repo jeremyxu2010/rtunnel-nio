@@ -22,21 +22,12 @@ public class CompressPacketHandler extends CommonHandler{
 	// if package's length less than this,do not compress.
 	private int compressThreshold = AdvancedProperties.getInstance().requireInteger("compressThreshold");
 
-	private AtomicBoolean compressed = new AtomicBoolean(false);
+	private AtomicBoolean compressed;
 
-	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		Object msg = e.getMessage();
-		if (msg instanceof Packet && ((Packet)msg).isProtocol(Packet.DATA)) {
-			Packet p = (Packet) msg;
-			compressed.set(p.isCompressed());
-			if(p.isCompressed()){
-				p.decode();
-			}
-		}
-		super.messageReceived(ctx, e);
-	}
-	
+	public CompressPacketHandler(AtomicBoolean compressed) {
+	    this.compressed = compressed;
+    }
+
 	@Override
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object msg = e.getMessage();
@@ -46,7 +37,6 @@ public class CompressPacketHandler extends CommonHandler{
 			if (uncompressed > compressThreshold) {
 				p.setCompressed();
 			}
-			p.encode();
 		}
 		super.writeRequested(ctx, e);
 	}

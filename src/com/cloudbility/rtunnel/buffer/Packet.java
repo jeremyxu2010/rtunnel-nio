@@ -158,7 +158,7 @@ public class Packet {
 		index = packet.index;
 		readIndex = packet.readIndex;
 	}
-
+	
 	/**
 	 * 
 	 * @param size
@@ -186,6 +186,10 @@ public class Packet {
 	 * 
 	 */
 	private AESCipher cipher;
+
+	public void setCipher(AESCipher cipher) {
+    	this.cipher = cipher;
+    }
 
 	private void init(int level) {
 		deflater = new CompressionImpl(buffer_margin);

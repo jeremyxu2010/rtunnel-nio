@@ -31,16 +31,6 @@ public class CompressPacketHandler extends CommonHandler {
     }
 	
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		Object msg = e.getMessage();
-		if (msg instanceof Packet && ((Packet)msg).isProtocol(Packet.DATA)) {
-			Packet cp = (Packet) msg;
-			cp.decode();
-		}
-		super.messageReceived(ctx, e);
-	}
-	
-	@Override
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object msg = e.getMessage();
 		if (this.tunnelConfig != null && msg instanceof Packet && ((Packet)msg).isProtocol(Packet.DATA)) {
@@ -51,7 +41,6 @@ public class CompressPacketHandler extends CommonHandler {
 				if (uncompressed > compressThreshold) {
 					p.setCompressed();
 				}
-				p.encode();
 				if (uncompressed > compressThreshold) {
 					int compressed = p.getDataLen();
 					this.tunnelConfig.setCompressRatio(compressed, uncompressed);
