@@ -74,6 +74,10 @@ public class Packet {
 	// close tunnel
 	public static final int CLOSE_TUNNEL = 0x07;
 
+	public static final int DH_KEY = 0x08;
+	
+	public static final int ACK_DH_KEY = 0x09;
+	
 	// 当前的协议以及用于扩展协议占用的bit位的MASK，即当前有7种协议0x01-0x07,预留0x08-0x0F,占用低4bit
 	public static final int PROTOCOL_BIT_MASK = 0x0F;
 	// type&=CLEAR_PROTOCOL_BIT_MASK 可以清空协议
@@ -111,6 +115,7 @@ public class Packet {
 	// 1100 0000 高2bit的MASK
 	public static final int HIGH_MASK = 0xC0;
 
+
 	private static Map<Integer, String> SEG_TYPE_DESC = new HashMap<Integer, String>();
 	static {
 		SEG_TYPE_DESC.put(HEART_BEAT, "HEART_BEAT_PACKET");
@@ -121,6 +126,8 @@ public class Packet {
 		SEG_TYPE_DESC.put(ACK_NEW_TCP_SOCKET, "ACK_NEW_TCP_SOCKET");
 		SEG_TYPE_DESC.put(DATA, "DATA_PACKET");
 		SEG_TYPE_DESC.put(CLOSE_TUNNEL, "CLOSE_TUNNEL");
+		SEG_TYPE_DESC.put(DH_KEY, "DH_KEY");
+		SEG_TYPE_DESC.put(ACK_DH_KEY, "ACK_DH_KEY");
 	}
 
 	/**
@@ -739,5 +746,10 @@ public class Packet {
 		setControlPacket(p, Packet.CLOSE_TUNNEL, resultBytes);
 		return p;
 	}
+
+	public static Packet fillDHKeyPacket(Packet p, int protocol, byte[] keyBytes) {
+		setControlPacket(p, protocol, keyBytes);
+		return p;
+    }
 
 }

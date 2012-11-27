@@ -5,6 +5,7 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
 import com.cloudbility.rtunnel.client.CompressOrUncompressPacketHandler;
+import com.cloudbility.rtunnel.common.DHKeyExchangerHandler;
 import com.cloudbility.rtunnel.common.HeartBeatTimerHandler;
 import com.cloudbility.rtunnel.common.ReceivingPacketHandler;
 import com.cloudbility.rtunnel.common.WritePacketHandler;
@@ -37,6 +38,8 @@ public class ServerInboundChannelPipelineFactory implements
 		cpl.addLast("heartBeatFilter", new HeartBeatTimerHandler());
 		
 		cpl.addLast("compressPacket", new CompressPacketHandler());
+		
+		cpl.addLast("DHKeyExchanger", new DHKeyExchangerHandler());
 		
 		// no heartbeat packet will reach the following handler
 		// any data or control packet can reach here
