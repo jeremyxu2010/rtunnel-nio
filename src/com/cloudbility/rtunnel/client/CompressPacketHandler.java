@@ -33,7 +33,7 @@ public class CompressPacketHandler extends CommonHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object msg = e.getMessage();
-		if (msg instanceof Packet) {
+		if (msg instanceof Packet && ((Packet)msg).isProtocol(Packet.DATA)) {
 			Packet cp = (Packet) msg;
 			cp.decode();
 		}
