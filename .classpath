@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" output="test-classes" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/agent-common"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/asm-3.3.1.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/bcmail-jdk15-145.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/bcprov-jdk15-145.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/cloudbility-common.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/fastjson-1.1.23.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/grizzly-framework-2.2.16.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/grizzly-http-2.2.16.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/grizzly-http-server-2.2.16.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/gson-2.0.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/httpclient-4.2.1.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/httpcore-4.2.1.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jcl-over-slf4j-1.6.4.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jersey-client-1.14.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jersey-core-1.14.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jersey-grizzly2-1.14.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jersey-server-1.14.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jline-1.0.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jzlib-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/logback-classic-1.0.6.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/logback-core-1.0.6.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="lib" path="/agent-thirdparty/lib/jsocksproxy.jar"/>
+	<classpathentry kind="lib" path="lib/netty-3.5.9.Final.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cloudbility-common"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>
