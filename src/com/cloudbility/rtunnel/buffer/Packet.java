@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.cloudbility.common.crypto.AESCipher;
 import com.cloudbility.common.crypto.CryptoException;
-import com.skybility.cloudsoft.rtunnel.common.Compression;
-import com.skybility.cloudsoft.rtunnel.common.CompressionImpl;
+import com.cloudbility.rtunnel.common.Compression;
+import com.cloudbility.rtunnel.common.CompressionImpl;
 
 /**
  * 一个可重用IO包的封装，包括缓冲区、压缩/解压、加密/解密。 数据缓冲区的长度不会超过 {@link #PACKET_MAX_SIZE}
@@ -654,7 +654,7 @@ public class Packet {
 	 */
 	public ChannelBuffer wrapPacket() {
 		fillHeader();
-		return ChannelBuffers.wrappedBuffer(this.buffer, 0, index);
+		return ChannelBuffers.wrappedBuffer(this.buffer, 0, index).copy();
 	}
 
 	/**
@@ -664,7 +664,7 @@ public class Packet {
 	 */
 	public ChannelBuffer wrapPacketData() {
 		return ChannelBuffers.wrappedBuffer(this.buffer, HEAD_SIZE, index
-				- HEAD_SIZE);
+				- HEAD_SIZE).copy();
 	}
 
 	/**

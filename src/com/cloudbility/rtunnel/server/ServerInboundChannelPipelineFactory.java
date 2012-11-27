@@ -4,9 +4,10 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
-import com.cloudbility.rtunnel.HeartBeatTimerHandler;
-import com.cloudbility.rtunnel.ReceivingPacketHandler;
-import com.cloudbility.rtunnel.WritePacketHandler;
+import com.cloudbility.rtunnel.client.CompressOrUncompressPacketHandler;
+import com.cloudbility.rtunnel.common.HeartBeatTimerHandler;
+import com.cloudbility.rtunnel.common.ReceivingPacketHandler;
+import com.cloudbility.rtunnel.common.WritePacketHandler;
 
 /**
  * rtunnel client first connected to rtunnel server, or rtunnel client connected
@@ -34,6 +35,8 @@ public class ServerInboundChannelPipelineFactory implements
 
 		// filter heart beat packet
 		cpl.addLast("heartBeatFilter", new HeartBeatTimerHandler());
+		
+		cpl.addLast("compressPacket", new CompressPacketHandler());
 		
 		// no heartbeat packet will reach the following handler
 		// any data or control packet can reach here

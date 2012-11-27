@@ -14,7 +14,7 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudbility.rtunnel.RTunnelBootstrap;
+import com.cloudbility.rtunnel.common.RTunnelBootstrap;
 
 /**
  * restart is supported,but not tested.

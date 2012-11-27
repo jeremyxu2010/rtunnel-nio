@@ -27,7 +27,7 @@ public class CompressPacketHandler extends CommonHandler{
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object msg = e.getMessage();
-		if (msg instanceof Packet && ((Packet)msg).isData()) {
+		if (msg instanceof Packet && ((Packet)msg).isProtocol(Packet.DATA)) {
 			compressed.set(((Packet)msg).isCompressed());
 		}
 		super.messageReceived(ctx, e);

@@ -7,8 +7,8 @@ import org.jboss.netty.channel.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudbility.rtunnel.CommonHandler;
 import com.cloudbility.rtunnel.buffer.Packet;
+import com.cloudbility.rtunnel.common.CommonHandler;
 
 /**
  * when connected,send a NEW_TCP_SOCKET packet to agentd with forward-port and

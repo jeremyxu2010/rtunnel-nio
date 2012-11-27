@@ -9,8 +9,8 @@ import org.jboss.netty.channel.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudbility.rtunnel.CommonHandler;
 import com.cloudbility.rtunnel.buffer.Packet;
+import com.cloudbility.rtunnel.common.CommonHandler;
 
 /**
  * 控制通道或者数据通道，取决于收到的第一个Packet是否是ACK_NEW_TCP_SOCKET

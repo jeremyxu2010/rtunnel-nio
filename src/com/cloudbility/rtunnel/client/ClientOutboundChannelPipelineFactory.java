@@ -4,8 +4,8 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
-import com.cloudbility.rtunnel.ReceivingDataAsPacket;
-import com.cloudbility.rtunnel.WritePacketDataHandler;
+import com.cloudbility.rtunnel.common.ReceivingDataAsPacket;
+import com.cloudbility.rtunnel.common.WritePacketDataHandler;
 
 /**
  * 连接proxy server的ChannelPipelineFactory
@@ -17,11 +17,13 @@ public class ClientOutboundChannelPipelineFactory implements
 	
 	@SuppressWarnings("unused")
 	private ClientPipeConfig config;
+	private TunnelConfig tunnelConfig;
 	
 	
-	public ClientOutboundChannelPipelineFactory(ClientPipeConfig config) {
+	public ClientOutboundChannelPipelineFactory(ClientPipeConfig config, TunnelConfig tunnelConfig) {
 		super();
 		this.config = config;
+		this.tunnelConfig = tunnelConfig;
 	}
 
 
@@ -31,6 +33,8 @@ public class ClientOutboundChannelPipelineFactory implements
 		cpl.addLast("writeDecoder", new WritePacketDataHandler());
 		//把读出的数据封装成Packet
 		cpl.addLast("readDecoder", new ReceivingDataAsPacket());
+		
+		cpl.addLast("compressPacket", new CompressOrUncompressPacketHandler(tunnelConfig));
 		//
 		ClientOutboundHandler handler = new ClientOutboundHandler();
 		cpl.addLast("outboundHandler", handler);
