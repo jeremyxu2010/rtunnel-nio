@@ -1,6 +1,7 @@
 *.class
 
 classes
+bin
 test-classes
 
 logs
